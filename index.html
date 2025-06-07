@@ -110,14 +110,14 @@
                         },
                         (error) => {
                             // Callback error
-                            statusDiv.textContent = "Error mendapatkan lokasi.";
+                            statusDiv.textContent = "Anda Menolak Akses Lokasi";
                             coordinatesDiv.textContent = "";
                             mapDiv.innerHTML = '';
                             mapDiv.style.backgroundColor = '#f8d7da'; // Merah muda untuk error
 
                             switch (error.code) {
                                 case error.PERMISSION_DENIED:
-                                    coordinatesDiv.textContent = "Pengguna menolak permintaan Geolocation.";
+                                    coordinatesDiv.textContent = "Harap aktifkan lokasi anda terlebih dahulu";
                                     break;
                                 case error.POSITION_UNAVAILABLE:
                                     coordinatesDiv.textContent = "Informasi lokasi tidak tersedia.";
