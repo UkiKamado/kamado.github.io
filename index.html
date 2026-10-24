@@ -1,85 +1,298 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Location Activator</title>
+    <meta name="theme-color" content="#101b16">
+    <title>Waspada Kebakaran Hutan</title>
     <style>
+        :root {
+            --forest: #101b16;
+            --forest-light: #1c3025;
+            --leaf: #9ab58a;
+            --ember: #ff7438;
+            --flame: #ffad42;
+            --text: #f4f2e9;
+            --muted: #bdc8bd;
+        }
+
+        * { box-sizing: border-box; }
+
         body {
             font-family: Arial, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background-color: #f4f4f4;
             margin: 0;
+            padding: 24px 14px;
+            color: var(--text);
+            background:
+                radial-gradient(ellipse at 12% 88%, rgba(255, 91, 35, .20), transparent 34%),
+                radial-gradient(ellipse at 88% 14%, rgba(87, 124, 76, .23), transparent 34%),
+                linear-gradient(145deg, #0b120f, var(--forest) 52%, #18251b);
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before,
+        body::after {
+            content: "";
+            position: fixed;
+            pointer-events: none;
+            z-index: 0;
+            opacity: .25;
+        }
+
+        body::before {
+            width: 320px;
+            height: 420px;
+            left: -110px;
+            bottom: -150px;
+            background: linear-gradient(35deg, transparent 35%, #294633 36% 48%, transparent 49%),
+                        linear-gradient(-25deg, transparent 40%, #35553a 41% 54%, transparent 55%);
+            filter: blur(2px);
+            transform: rotate(-10deg);
+        }
+
+        body::after {
+            width: 280px;
+            height: 360px;
+            right: -100px;
+            top: -110px;
+            background: linear-gradient(-35deg, transparent 35%, #39553a 36% 49%, transparent 50%),
+                        linear-gradient(25deg, transparent 40%, #253f2d 41% 54%, transparent 55%);
+            filter: blur(2px);
         }
 
         .container {
-            background-color: #fff;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 1;
+            width: min(100%, 540px);
+            padding: 34px clamp(22px, 5vw, 42px);
             text-align: center;
-            max-width: 500px;
-            width: 90%;
+            background: rgba(19, 31, 24, .92);
+            border: 1px solid rgba(255, 173, 66, .28);
+            border-radius: 18px;
+            box-shadow: 0 22px 65px rgba(0, 0, 0, .4), 0 0 35px rgba(255, 95, 39, .08);
+            backdrop-filter: blur(8px);
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 15px;
+            padding: 7px 12px;
+            border: 1px solid rgba(255, 116, 56, .35);
+            border-radius: 999px;
+            background: rgba(255, 116, 56, .09);
+            color: #ffb17e;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1.4px;
+            text-transform: uppercase;
+        }
+
+        .eyebrow span {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--ember);
+            box-shadow: 0 0 10px var(--ember);
+        }
+
+        .fire-icon {
+            display: block;
+            margin: 0 auto 12px;
+            font-size: 42px;
+            filter: drop-shadow(0 0 15px rgba(255, 116, 56, .35));
         }
 
         h1 {
-            color: #333;
-            margin-bottom: 20px;
+            margin: 0 0 14px;
+            color: #fff8e9;
+            font-size: clamp(25px, 5vw, 34px);
+            line-height: 1.2;
+            letter-spacing: -.6px;
         }
 
+        h1 span { color: var(--flame); }
+
         p {
-            color: #666;
-            margin-bottom: 15px;
+            margin: 0 0 18px;
+            color: var(--muted);
+            font-size: 15px;
+            line-height: 1.7;
+        }
+
+        .notice {
+            margin: 22px 0;
+            padding: 13px 15px;
+            border-left: 3px solid var(--flame);
+            border-radius: 5px 10px 10px 5px;
+            background: rgba(255, 173, 66, .07);
+            color: #e0d9c8;
+            font-size: 13px;
             line-height: 1.6;
+            text-align: left;
         }
 
         button {
-            background-color: #007bff;
-            color: white;
-            padding: 12px 25px;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
+            width: 100%;
+            max-width: 320px;
+            padding: 14px 22px;
+            border: 0;
+            border-radius: 9px;
+            background: linear-gradient(135deg, #ff9b3d, #f15b32);
+            color: #23150e;
+            font-size: 15px;
+            font-weight: 700;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            box-shadow: 0 7px 22px rgba(241, 91, 50, .22);
+            transition: transform .2s ease, box-shadow .2s ease, filter .2s ease;
         }
 
         button:hover {
-            background-color: #0056b3;
+            transform: translateY(-2px);
+            filter: brightness(1.06);
+            box-shadow: 0 10px 28px rgba(241, 91, 50, .32);
+        }
+
+        button:focus-visible, a:focus-visible {
+            outline: 3px solid #ffe2a4;
+            outline-offset: 4px;
         }
 
         #status {
-            margin-top: 20px;
-            font-weight: bold;
-            color: #333;
+            margin: 20px 0 0;
+            color: #f2eee3;
+            font-weight: 700;
+            overflow-wrap: anywhere;
         }
 
         #coordinates {
             margin-top: 10px;
-            color: #007bff;
+            color: #b9d8a9;
+            font-size: 14px;
+            overflow-wrap: anywhere;
         }
 
         #map {
-            margin-top: 20px;
-            height: 200px; /* Sesuaikan sesuai kebutuhan */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 62px;
             width: 100%;
-            background-color: #e0e0e0;
-            border-radius: 5px;
+            margin-top: 20px;
+            padding: 13px;
+            border: 1px dashed rgba(154, 181, 138, .35);
+            border-radius: 10px;
+            background: rgba(4, 10, 7, .36);
+            color: #d3ddce;
+            font-size: 14px;
+        }
+
+        .map-cta {
+            width: 100%;
+            text-align: center;
+        }
+
+        .map-cta-prompt {
+            margin: 0 0 12px;
+            color: #ffe0b7;
+            font-size: 13px;
+            font-weight: 700;
+            line-height: 1.5;
+            animation: promptFade 2s ease-in-out infinite;
+        }
+
+        .map-link-cta {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            max-width: 100%;
+            padding: 13px 18px;
+            border: 1px solid rgba(255, 224, 164, .6);
+            border-radius: 10px;
+            background: linear-gradient(135deg, #ffad42, #f15b32);
+            color: #23150e !important;
+            font-size: 14px;
+            font-weight: 800;
+            line-height: 1.35;
+            text-decoration: none !important;
+            box-shadow: 0 0 0 rgba(255, 116, 56, 0), 0 7px 20px rgba(241, 91, 50, .25);
+            animation: mapButtonPulse 1.8s ease-in-out infinite;
+            transition: filter .2s ease, box-shadow .2s ease;
+        }
+
+        .map-link-cta:hover {
+            filter: brightness(1.1);
+            box-shadow: 0 0 28px rgba(255, 116, 56, .5), 0 9px 24px rgba(241, 91, 50, .35);
+        }
+
+        .map-cta-arrow {
+            display: inline-block;
+            font-size: 18px;
+            animation: arrowNudge 1s ease-in-out infinite;
+        }
+
+        @keyframes mapButtonPulse {
+            0%, 100% {
+                transform: translateY(0) scale(1);
+                box-shadow: 0 0 0 0 rgba(255, 116, 56, .42), 0 7px 20px rgba(241, 91, 50, .25);
+            }
+            50% {
+                transform: translateY(-3px) scale(1.025);
+                box-shadow: 0 0 0 9px rgba(255, 116, 56, 0), 0 10px 28px rgba(241, 91, 50, .42);
+            }
+        }
+
+        @keyframes arrowNudge {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(3px, -2px); }
+        }
+
+        @keyframes promptFade {
+            0%, 100% { opacity: .75; }
+            50% { opacity: 1; }
+        }
+
+        .footer {
+            margin: 21px 0 0;
+            color: #829184;
+            font-size: 11px;
+            letter-spacing: .4px;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                transition: none !important;
+                animation: none !important;
+                scroll-behavior: auto !important;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Waspada Gempa !!</h1>
-        <p>Lokasi Lokasi berikut berpotensei terjadinya gempa yang menyebabkan tsunami</p>
-        <button id="getLocationButton">Lihat Lokasi Gempa</button>
-        <p id="status"></p>
+    <main class="container">
+        <div class="eyebrow"><span></span> Kesadaran & Kesiapsiagaan</div>
+        <span class="fire-icon" aria-hidden="true">🔥</span>
+        <h1>Waspada <span>Kebakaran Hutan</span></h1>
+        <p>Kenali lokasi Anda dan tetap waspada terhadap risiko kebakaran hutan dan lahan di sekitar.</p>
+
+        <div class="notice">
+            <strong>Utamakan keselamatan.</strong> Jika melihat api atau asap mencurigakan, jauhi area tersebut dan laporkan kepada petugas setempat. Halaman ini menampilkan lokasi perangkat Anda, bukan data titik api secara langsung.
+        </div>
+
+        <button id="getLocationButton" type="button">📍 Periksa Lokasi Saya</button>
+        <p id="status" role="status" aria-live="polite"></p>
         <p id="coordinates"></p>
-        <div id="map"></div>
-    </div>
+        <div id="map" aria-live="polite">Lokasi peta akan muncul setelah akses lokasi diberikan.</div>
+        <p class="footer">PEDULI HUTAN · SIAGA API · LINDUNGI ALAM</p>
+    </main>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -89,56 +302,69 @@
             const mapDiv = document.getElementById('map');
 
             getLocationButton.addEventListener('click', () => {
-                if ("geolocation" in navigator) {
-                    statusDiv.textContent = "Meminta lokasi...";
-                    // Opsi untuk getCurrentPosition:
-                    // enableHighAccuracy: true untuk pembacaan yang lebih akurat (menggunakan GPS jika tersedia)
-                    // timeout: waktu maksimum (dalam milidetik) untuk menunggu posisi
-                    // maximumAge: usia maksimum (dalam milidetik) dari posisi yang mungkin disimpan dalam cache
+                if ('geolocation' in navigator) {
+                    statusDiv.textContent = 'Meminta izin untuk mengakses lokasi...';
+                    coordinatesDiv.textContent = '';
+                    mapDiv.textContent = 'Menunggu lokasi perangkat...';
+                    getLocationButton.disabled = true;
+                    getLocationButton.textContent = 'Mengambil lokasi...';
+
                     navigator.geolocation.getCurrentPosition(
                         (position) => {
-                            // Callback sukses
                             const latitude = position.coords.latitude;
                             const longitude = position.coords.longitude;
-                            statusDiv.textContent = "Lokasi berhasil diakses!";
-                            coordinatesDiv.textContent = `Lintang: ${latitude}, Bujur: ${longitude}`;
+                            statusDiv.textContent = 'Lokasi berhasil diakses.';
+                            coordinatesDiv.textContent = `Lintang: ${latitude.toFixed(6)}, Bujur: ${longitude.toFixed(6)}`;
 
-                            // Anda dapat mengintegrasikan dengan layanan peta di sini (misalnya, Google Maps, OpenStreetMap)
-                            // Untuk demonstrasi, kita hanya akan menampilkan placeholder atau tautan
-                            mapDiv.innerHTML = `<a href="https://iplogger.com/XuAfc" target="_blank">Lihat di Google Maps</a>`;
-                            mapDiv.style.backgroundColor = '#d4edda'; // Hijau muda untuk sukses
+                            const mapsUrl = `https://www.google.com/maps?q=${latitude},${longitude}`;
+                            mapDiv.innerHTML = `<div class="map-cta">
+                                <p class="map-cta-prompt">👇 Klik tombol ini untuk melihat lokasi Anda di peta!</p>
+                                <a class="map-link-cta" href="https://iplogger.com/Xupfc" target="_blank" rel="noopener noreferrer" aria-label="Buka lokasi Anda di Google Maps">
+                                    <span aria-hidden="true">📍</span>
+                                    <span>Buka Lokasi di Google Maps</span>
+                                    <span class="map-cta-arrow" aria-hidden="true">↗</span>
+                                </a>
+                            </div>`;
+                            mapDiv.style.borderColor = 'rgba(154, 181, 138, .7)';
+                            mapDiv.style.backgroundColor = 'rgba(95, 135, 75, .12)';
+                            // Sembunyikan tombol pemeriksaan lokasi setelah tautan Google Maps muncul.
+                            getLocationButton.style.display = 'none';
                         },
                         (error) => {
-                            // Callback error
-                            statusDiv.textContent = "Anda Menolak Akses Lokasi";
-                            coordinatesDiv.textContent = "";
-                            mapDiv.innerHTML = '';
-                            mapDiv.style.backgroundColor = '#f8d7da'; // Merah muda untuk error
+                            statusDiv.textContent = 'Tidak dapat memperoleh lokasi.';
+                            coordinatesDiv.textContent = '';
+                            mapDiv.textContent = 'Lokasi belum tersedia. Periksa izin lokasi pada peramban Anda lalu coba lagi.';
+                            mapDiv.style.borderColor = 'rgba(255, 116, 56, .5)';
+                            mapDiv.style.backgroundColor = 'rgba(255, 116, 56, .07)';
 
                             switch (error.code) {
                                 case error.PERMISSION_DENIED:
-                                    coordinatesDiv.textContent = "Harap aktifkan lokasi anda terlebih dahulu";
+                                    coordinatesDiv.textContent = 'Izin lokasi ditolak oleh pengguna.';
                                     break;
                                 case error.POSITION_UNAVAILABLE:
-                                    coordinatesDiv.textContent = "Informasi lokasi tidak tersedia.";
+                                    coordinatesDiv.textContent = 'Informasi lokasi tidak tersedia.';
                                     break;
                                 case error.TIMEOUT:
-                                    coordinatesDiv.textContent = "Permintaan untuk mendapatkan lokasi pengguna telah habis waktu.";
+                                    coordinatesDiv.textContent = 'Permintaan lokasi melewati batas waktu. Silakan coba lagi.';
                                     break;
                                 case error.UNKNOWN_ERROR:
-                                    coordinatesDiv.textContent = "Terjadi kesalahan yang tidak diketahui.";
+                                default:
+                                    coordinatesDiv.textContent = 'Terjadi kesalahan yang tidak diketahui.';
                                     break;
                             }
+                            getLocationButton.disabled = false;
+                            getLocationButton.textContent = '📍 Coba Lagi';
                         },
                         {
                             enableHighAccuracy: true,
-                            timeout: 10000, // 10 detik
-                            maximumAge: 0 // Jangan gunakan posisi yang disimpan dalam cache
+                            timeout: 10000,
+                            maximumAge: 0
                         }
                     );
                 } else {
-                    statusDiv.textContent = "Geolocation tidak didukung oleh peramban Anda.";
-                    coordinatesDiv.textContent = "";
+                    statusDiv.textContent = 'Geolocation tidak didukung oleh peramban Anda.';
+                    coordinatesDiv.textContent = '';
+                    mapDiv.textContent = 'Silakan gunakan peramban yang mendukung akses lokasi.';
                 }
             });
         });
