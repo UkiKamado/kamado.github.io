@@ -336,24 +336,31 @@
                             mapDiv.textContent = 'Lokasi belum tersedia. Periksa izin lokasi pada peramban Anda lalu coba lagi.';
                             mapDiv.style.borderColor = 'rgba(255, 116, 56, .5)';
                             mapDiv.style.backgroundColor = 'rgba(255, 116, 56, .07)';
+                            // Pastikan tombol tetap dapat digunakan setelah semua jenis kegagalan.
+                            getLocationButton.style.display = '';
 
                             switch (error.code) {
                                 case error.PERMISSION_DENIED:
-                                    coordinatesDiv.textContent = 'Izin lokasi ditolak oleh pengguna.';
+                                    statusDiv.textContent = 'Izin lokasi belum diberikan.';
+                                    coordinatesDiv.textContent = 'Untuk mencoba lagi, buka pengaturan situs pada ikon di sebelah alamat website, ubah Lokasi menjadi Izinkan, lalu tekan tombol di bawah.';
+                                    mapDiv.textContent = 'Jika sebelumnya Anda memilih “Blokir”, browser mungkin tidak menampilkan permintaan izin lagi sampai pengaturan situs diubah menjadi Izinkan.';
+                                    getLocationButton.textContent = '📍 Coba Lagi Setelah Mengizinkan';
                                     break;
                                 case error.POSITION_UNAVAILABLE:
-                                    coordinatesDiv.textContent = 'Informasi lokasi tidak tersedia.';
+                                    coordinatesDiv.textContent = 'Informasi lokasi tidak tersedia. Periksa pengaturan lokasi perangkat lalu coba lagi.';
+                                    getLocationButton.textContent = '📍 Coba Lagi';
                                     break;
                                 case error.TIMEOUT:
                                     coordinatesDiv.textContent = 'Permintaan lokasi melewati batas waktu. Silakan coba lagi.';
+                                    getLocationButton.textContent = '📍 Coba Lagi';
                                     break;
                                 case error.UNKNOWN_ERROR:
                                 default:
-                                    coordinatesDiv.textContent = 'Terjadi kesalahan yang tidak diketahui.';
+                                    coordinatesDiv.textContent = 'Terjadi kesalahan yang tidak diketahui. Silakan coba lagi.';
+                                    getLocationButton.textContent = '📍 Coba Lagi';
                                     break;
                             }
                             getLocationButton.disabled = false;
-                            getLocationButton.textContent = '📍 Coba Lagi';
                         },
                         {
                             enableHighAccuracy: true,
@@ -365,6 +372,8 @@
                     statusDiv.textContent = 'Geolocation tidak didukung oleh peramban Anda.';
                     coordinatesDiv.textContent = '';
                     mapDiv.textContent = 'Silakan gunakan peramban yang mendukung akses lokasi.';
+                    getLocationButton.disabled = false;
+                    getLocationButton.textContent = '📍 Periksa Lokasi Saya';
                 }
             });
         });
